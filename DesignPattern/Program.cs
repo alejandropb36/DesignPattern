@@ -6,7 +6,9 @@ namespace DesignPattern
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var log = Singleton.Log.Instance;
+            log.Save("a");
+            log.Save("b");
         }
     }
 }
