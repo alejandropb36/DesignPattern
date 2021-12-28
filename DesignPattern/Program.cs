@@ -23,14 +23,31 @@ namespace DesignPattern
             //var drinkWithBeer = new DrinkWithBeer(10, 10, beer);
             //drinkWithBeer.Build();
 
-            using(var context = new DesignPatternsContext())
+            //using(var context = new DesignPatternsContext())
+            //{
+            //    var beerRepository = new BeerRepository(context);
+            //    var beer = new Beer();
+            //    beer.Name = "Victoria";
+            //    beer.Style = "Pilsner";
+            //    beerRepository.Add(beer);
+            //    beerRepository.Save();
+            //}
+
+            using (var context = new DesignPatternsContext())
             {
-                var beerRepository = new BeerRepository(context);
+                var beerRepository = new Repository<Beer>(context);
                 var beer = new Beer();
-                beer.Name = "Victoria";
-                beer.Style = "Pilsner";
+                beer.Name = "Pacifico";
+                beer.Style = "SESE";
                 beerRepository.Add(beer);
                 beerRepository.Save();
+
+                foreach(var b in beerRepository.Get())
+                {
+                    Console.WriteLine($"{b.Name} {b.Style}");
+                }
+
+                //Aqui se puede implementar otro modelo
             }
         }
     }

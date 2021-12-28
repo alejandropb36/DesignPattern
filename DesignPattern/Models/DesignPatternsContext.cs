@@ -20,13 +20,14 @@ namespace DesignPattern.Models
         }
 
         public virtual DbSet<Beer> Beer { get; set; }
+        public virtual DbSet<Brand> Brand { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=localhost; Database=DesignPatterns; Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=localhost; Database=DesignPatterns;Trusted_Connection=True;");
             }
         }
 
@@ -39,6 +40,13 @@ namespace DesignPattern.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Style)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Brand>(entity =>
+            {
+                entity.Property(e => e.Name)
                     .HasMaxLength(100)
                     .IsUnicode(false);
             });
