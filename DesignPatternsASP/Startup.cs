@@ -1,7 +1,10 @@
 using System;
+using DesignPatterns.Models.Data;
+using DesignPatterns.Repository;
 using DesignPatternsASP.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -40,6 +43,14 @@ namespace DesignPatternsASP
                     .GetValue<decimal>("Extra");
                 return new ForeignEarnFactory(percentage, extra);
             });
+
+            // Design Pattern Repository
+            services.AddDbContext<DesignPatternsContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("Connection"));
+            });
+
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
         }
 
