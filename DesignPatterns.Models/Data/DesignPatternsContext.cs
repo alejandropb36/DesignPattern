@@ -26,7 +26,7 @@ namespace DesignPatterns.Models.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                //optionsBuilder.UseSqlServer("Server=localhost;Database=DesignPatterns;Trusted_Connection=True;");
+                // optionsBuilder.UseSqlServer("Server=localhost;Database=DesignPatterns;User Id=sa;Password=secret123;");
             }
         }
 
@@ -35,18 +35,26 @@ namespace DesignPatterns.Models.Data
             modelBuilder.Entity<Beer>(entity =>
             {
                 entity.Property(e => e.Name)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Style)
                     .HasMaxLength(100)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.Brand)
+                    .WithMany(p => p.Beer)
+                    .HasForeignKey(d => d.BrandId)
+                    .HasConstraintName("Fk_Brand");
             });
 
             modelBuilder.Entity<Brand>(entity =>
             {
+                entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+
                 entity.Property(e => e.Name)
-                    .HasMaxLength(100)
+                    .HasMaxLength(255)
                     .IsUnicode(false);
             });
 
