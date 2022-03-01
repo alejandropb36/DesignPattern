@@ -1,6 +1,7 @@
 ﻿using DesignPattern.FactoryPattern;
 using DesignPattern.Models;
 using DesignPattern.RepositoryPattern;
+using DesignPattern.StrategyPattern;
 using DesignPattern.UnitOfWorkPattern;
 using System;
 using System.Linq;
@@ -34,45 +35,57 @@ namespace DesignPattern
             //    beerRepository.Save();
             //}
 
-            using (var context = new DesignPatternsContext())
-            {
-                //var beerRepository = new Repository<Beer>(context);
-                //var beer = new Beer();
-                //beer.Name = "Pacifico";
-                //beer.Style = "SESE";
-                //beerRepository.Add(beer);
-                //beerRepository.Save();
 
-                //foreach(var b in beerRepository.Get())
-                //{
-                //    Console.WriteLine($"{b.Name} {b.Style}");
-                //}
+            // Unit of work and other patterns
+            //using (var context = new DesignPatternsContext())
+            //{
+            //    //var beerRepository = new Repository<Beer>(context);
+            //    //var beer = new Beer();
+            //    //beer.Name = "Pacifico";
+            //    //beer.Style = "SESE";
+            //    //beerRepository.Add(beer);
+            //    //beerRepository.Save();
 
-                //Aqui se puede implementar otro modelo
+            //    //foreach(var b in beerRepository.Get())
+            //    //{
+            //    //    Console.WriteLine($"{b.Name} {b.Style}");
+            //    //}
 
-                // UnitOfWork
+            //    //Aqui se puede implementar otro modelo
 
-                var unitOfWork = new UnitOfWork(context);
-                var beers = unitOfWork.Beers;
+            //    // UnitOfWork
 
-                var beer = new Beer
-                {
-                    Name = "Fuller2",
-                    Style = "Style2"
-                };
+            //    var unitOfWork = new UnitOfWork(context);
+            //    var beers = unitOfWork.Beers;
 
-                beers.Add(beer);
+            //    var beer = new Beer
+            //    {
+            //        Name = "Fuller2",
+            //        Style = "Style2"
+            //    };
 
-                var brands = unitOfWork.Brands;
-                var brand = new Brand
-                {
-                    Name = "Una brand mas"
-                };
+            //    beers.Add(beer);
 
-                brands.Add(brand);
+            //    var brands = unitOfWork.Brands;
+            //    var brand = new Brand
+            //    {
+            //        Name = "Una brand mas"
+            //    };
 
-                unitOfWork.Save();
-            }
+            //    brands.Add(brand);
+
+            //    unitOfWork.Save();
+            //}
+
+            // Strategy Pattern
+            var context = new Context(new CarStrategy());
+            context.Run();
+
+            context.Strategy = new MotoStrategy();
+            context.Run();
+
+            context.Strategy = new BicycleStrategy();
+            context.Run();
         }
     }
 }
