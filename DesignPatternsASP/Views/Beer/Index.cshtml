@@ -12,11 +12,14 @@
 		<table class="table">
 			<tr>
 				<th>Nombre</th>
+				<th>Estilo</th>
 			</tr>
 			@foreach (var beer in Model)
 		   {
 			   <tr>
 				   <td>@beer.Name</td>
+				   <td>@beer.Style</td>
+
 			   </tr>
 		   }
 		</table>

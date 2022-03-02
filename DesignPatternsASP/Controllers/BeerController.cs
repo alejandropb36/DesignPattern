@@ -1,6 +1,7 @@
 ﻿using DesignPatterns.Models.Data;
 using DesignPatterns.Repository;
 using DesignPatternsASP.Models.ViewModels;
+using DesignPatternsASP.Strategies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -34,8 +35,7 @@ namespace DesignPatternsASP.Controllers
         [HttpGet]
         public IActionResult Add()
         {
-            var brands = _unitOfWork.Brands.Get();
-            ViewBag.Brands = new SelectList(brands, "Id", "Name");
+            GetBrandsData();
             return View();
         }
 
@@ -44,33 +44,25 @@ namespace DesignPatternsASP.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var brands = _unitOfWork.Brands.Get();
-                ViewBag.Brands = new SelectList(brands, "Id", "Name");
+                GetBrandsData();
                 return View("Add", formBeerViewModel);
             }
 
-            var beer = new Beer();
-            beer.Name = formBeerViewModel.Name;
-            beer.Style = formBeerViewModel.Style;
+            var context = formBeerViewModel.BrandId == null ?
+                            new BeerContext(new BeerWithBrandStrategy()) :
+                            new BeerContext(new BeerStrategy());
 
-            if (!string.IsNullOrEmpty(formBeerViewModel.OtherBrand) && (formBeerViewModel.BrandId == null || formBeerViewModel.BrandId == Guid.Empty))
-            {
-                var brand = new Brand();
-                brand.Name = formBeerViewModel.OtherBrand;
-                brand.Id = Guid.NewGuid();
-
-                beer.BrandId = brand.Id;
-                _unitOfWork.Brands.Add(brand);
-            }
-            else
-            {
-                beer.BrandId = formBeerViewModel.BrandId;
-            }
-
-            _unitOfWork.Beers.Add(beer);
-            _unitOfWork.Save();
+            context.Add(formBeerViewModel, _unitOfWork);
 
             return RedirectToAction("Index");
         }
+
+        #region HELPERS
+        private void GetBrandsData()
+        {
+            var brands = _unitOfWork.Brands.Get();
+            ViewBag.Brands = new SelectList(brands, "Id", "Name");
+        }
+        #endregion
     }
 }
