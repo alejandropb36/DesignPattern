@@ -3,6 +3,7 @@ using DesignPattern.Models;
 using DesignPattern.RepositoryPattern;
 using DesignPattern.StrategyPattern;
 using DesignPattern.UnitOfWorkPattern;
+using DesignPattern.BuilderPattern;
 using System;
 using System.Linq;
 
@@ -78,14 +79,24 @@ namespace DesignPattern
             //}
 
             // Strategy Pattern
-            var context = new Context(new CarStrategy());
-            context.Run();
+            //var context = new Context(new CarStrategy());
+            //context.Run();
 
-            context.Strategy = new MotoStrategy();
-            context.Run();
+            //context.Strategy = new MotoStrategy();
+            //context.Run();
 
-            context.Strategy = new BicycleStrategy();
-            context.Run();
+            //context.Strategy = new BicycleStrategy();
+            //context.Run();
+
+            // Builder Pattern
+
+            var builder = new PreparedAlcoholicDrinkConcreteBuilder();
+            var barmanDirector = new BarmanDirector(builder);
+
+            barmanDirector.PreparePinaColada();
+
+            var preparedDrink = builder.GetPreparedDrink();
+            Console.WriteLine(preparedDrink.Result);
         }
     }
 }
