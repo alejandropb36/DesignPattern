@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Tools.Earn;
+using Tools.Generator;
 
 namespace DesignPatternsASP
 {
@@ -52,6 +53,7 @@ namespace DesignPatternsASP
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<GeneratoConcretBuilder>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
